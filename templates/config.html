@@ -1,0 +1,43 @@
+{%load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <title>{% block title %}Device Settings{% endblock %}</title>
+</head>
+
+    <body>
+        {% block content %}
+       <div class = "logo">
+            <img src = "{%static 'images/logo.png'%}" alt="logo">
+            <h1>Dewarmte</h1>
+       </div> 
+        <br>
+        <div id = "content" class = "wifi_form">
+            <div class = "form_list">
+                <label for="wifi_list">Available networks:</label>
+                <form method="post"  >
+                    {%csrf_token%}
+                        <select  class = "select-dropdown" name = "wifi_list" id = "wifi_list" value = "{{ssid}}" onchange="this.form.submit()">
+                            <option value="" >--select network--</option>
+                            {% for result in results%}
+                                <option value="{{result.ssid}}" {%if result.ssid == ssid %} selected {%endif%}>{{result.ssid}}</option>
+                            {% endfor%}
+                        </select>
+                </form>
+            </div>
+            {% if wrong_pwd%}
+            <div class ="form_pwd" >
+                <label for = "network_password">Network Password</label>
+                <form method = "post">
+                    {%csrf_token%}
+                    <input type="password" id="network_password" name="network_password" placeholder="Network password">
+                    <button type="submit">Connect</button>
+                </form>
+            </div>
+            {%endif%}
+        </div>
+        {{alert|linebreaks}}
+        {% endblock %}
+    </body>
+</html>
